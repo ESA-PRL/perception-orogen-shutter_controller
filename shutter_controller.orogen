@@ -1,0 +1,20 @@
+name "shutter_controller"
+
+import_types_from "shutter_controllerTypes.hpp"
+import_types_from "base"
+
+task_context "Task" do
+    needs_configuration
+
+    property("init_shutter_time","int",300).
+        doc("Initial shutter time from yml")
+
+    input_port("frame", ro_ptr('base::samples::frame::Frame')).
+        doc("Input of the left camera")
+
+    output_port("shutter_time", "int").
+        doc("New shutter time for left and right camera")
+
+    port_driven "frame"
+    # periodic 0.1
+end
