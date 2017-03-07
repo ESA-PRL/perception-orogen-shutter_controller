@@ -2,12 +2,15 @@ name "shutter_controller"
 
 import_types_from "shutter_controllerTypes.hpp"
 import_types_from "base"
+using_library "shutter_controller"
+import_types_from "shutter_controller/Config.hpp"
+using_task_library "camera_base"
+using_task_library "camera_firewire"
 
 task_context "Task" do
     needs_configuration
 
-    property("init_shutter_time","int",300).
-        doc("Initial shutter time from yml")
+    property "config","shutter_controller/Config"
 
     input_port("frame", ro_ptr('base::samples::frame::Frame')).
         doc("Input of the left camera")
