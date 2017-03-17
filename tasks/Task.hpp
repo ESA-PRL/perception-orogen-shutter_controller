@@ -3,9 +3,9 @@
 
 #include "shutter_controller/TaskBase.hpp"
 #include <rtt/OperationCaller.hpp> // to call pancam operations
-#include <rtt/Operation.hpp>
-#include "camera_base/TaskBase.hpp" // for CamAttrib
-#include "camera_base/Task.hpp"
+//#include <rtt/internal/DataSources.hpp>
+#include "camera_firewire/CameraTask.hpp" // for CamAttrib
+#include "camera_firewire/CamFireWire.h" // set shutter time directly, without rock/orocos operations
 
 namespace shutter_controller {
     class ShutterController;
@@ -30,6 +30,10 @@ namespace shutter_controller {
         void errorHook();
         void stopHook();
         void cleanupHook();
+
+    private:
+        int delayCounter;
+        int delay;
     };
 }
 

@@ -6,6 +6,7 @@ using namespace shutter_controller;
 Task::Task(std::string const& name)
     : TaskBase(name)
 {
+    delayCounter = 0;
 }
 
 Task::Task(std::string const& name, RTT::ExecutionEngine* engine)
@@ -24,6 +25,7 @@ bool Task::configureHook()
         return false;
     const shutter_controller::Config config = _config.get();
     shutterCtrl = new shutter_controller::ShutterController(config);
+    delay = 3;
 
     return true;
 }
@@ -36,26 +38,28 @@ bool Task::startHook()
 void Task::updateHook()
 {
     TaskBase::updateHook();
+    
+    if ((delayCounter++)%delay != 0)
+        return;
 
     if (_frame.read(frame) == RTT::NewData)
     {
-        // analyze new frame
+        // analyze input frame
         int res = shutterCtrl->analyze( frame->getImage() );
 
         // compute new shutter time
         int newShutterTime = shutterCtrl->calcNewShutterTime( res );
 
-        if(hasPeer("pancam_left"))
-            std::cout << "yes, i know pancam" << std::endl;
-        else
-            std::cout << "nothing works" << std::endl;
+        // output shutter time
+        _shutter_value.write( newShutterTime );
 
+        /* operations approach
         // get operation pointers
         RTT::TaskContext* pancam_left = getPeer("pancam_left");
         //RTT::TaskContext* pancam_right = getPeer("pancam_right");
         RTT::OperationCaller<bool(const camera::int_attrib::CamAttrib,int)> setLeftIntAttrib = pancam_left->getOperation("setIntAttrib");
-        /*
-        RTT::OperationCaller<bool(camera::int_attrib::CamAttrib,int)> setRightIntAttrib = pancam_right->getOperation("setIntAttrib");
+        //RTT::OperationCaller<bool(const double,int)> setLeftIntAttrib = pancam_left->getOperation("setIntAttrib");
+        //RTT::OperationCaller<bool(camera::int_attrib::CamAttrib,int)> setRightIntAttrib = pancam_right->getOperation("setIntAttrib");
 
         // set shutter time on left and right camera
         bool res_left = setLeftIntAttrib(camera::int_attrib::ShutterValue, newShutterTime);
@@ -71,6 +75,7 @@ void Task::updateHook()
         */
     }
 }
+
 void Task::errorHook()
 {
     TaskBase::errorHook();

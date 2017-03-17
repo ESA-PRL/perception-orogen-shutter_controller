@@ -15,4 +15,6 @@
   <depend package="dummy-dependency-n" />
   -->
   <depend package="perception/shutter_controller" />
+  <depend package="drivers/orogen/camera_base" />
+  <depend package="drivers/camera_interface" />
 </package>
