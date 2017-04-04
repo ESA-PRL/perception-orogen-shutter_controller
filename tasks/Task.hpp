@@ -32,8 +32,8 @@ namespace shutter_controller {
         void cleanupHook();
 
     private:
-        int delayCounter;
-        int delay;
+        int periodCounter;
+        int shutterCompPeriod;
     };
 }
 

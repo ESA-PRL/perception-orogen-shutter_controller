@@ -4,9 +4,8 @@
 using namespace shutter_controller;
 
 Task::Task(std::string const& name)
-    : TaskBase(name)
+    : TaskBase(name), periodCounter(0)
 {
-    delayCounter = 0;
 }
 
 Task::Task(std::string const& name, RTT::ExecutionEngine* engine)
@@ -16,7 +15,6 @@ Task::Task(std::string const& name, RTT::ExecutionEngine* engine)
 
 Task::~Task()
 {
-    delete shutterCtrl;
 }
 
 bool Task::configureHook()
@@ -25,7 +23,7 @@ bool Task::configureHook()
         return false;
     const shutter_controller::Config config = _config.get();
     shutterCtrl = new shutter_controller::ShutterController(config);
-    delay = 3;
+    shutterCompPeriod = config.shutterCompPeriod;
 
     return true;
 }
@@ -39,7 +37,7 @@ void Task::updateHook()
 {
     TaskBase::updateHook();
     
-    if ((delayCounter++)%delay != 0)
+    if ((periodCounter++)%shutterCompPeriod != 0)
         return;
 
     if (_frame.read(frame) == RTT::NewData)

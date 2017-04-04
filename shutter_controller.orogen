@@ -25,5 +25,4 @@ task_context "Task" do
         doc("New shutter time for left and right camera")
 
     port_driven "frame"
-    # periodic 0.1
 end
