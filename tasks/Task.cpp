@@ -24,6 +24,7 @@ bool Task::configureHook()
     const shutter_controller::Config config = _config.get();
     shutterCtrl = new shutter_controller::ShutterController(config);
     shutterCompPeriod = config.shutterCompPeriod;
+    stop=false;
 
     return true;
 }
@@ -40,6 +41,12 @@ void Task::updateHook()
     if ((periodCounter++)%shutterCompPeriod != 0)
         return;
 
+    if (_stop.connected())
+    {
+        if (_stop.read(stop) == RTT::NewData)
+            std::cout << " Stop shutter : " << stop << std::endl;
+    }
+
     if (_frame.read(frame) == RTT::NewData)
     {
         // analyze input frame
@@ -48,8 +55,11 @@ void Task::updateHook()
         // compute new shutter time
         int newShutterTime = shutterCtrl->calcNewShutterTime( res );
 
-        // output shutter time
-        _shutter_value.write( newShutterTime );
+        if (!stop)
+        {
+            // output shutter time
+            _shutter_value.write( newShutterTime );
+        }
 
         /* operations approach
         // get operation pointers

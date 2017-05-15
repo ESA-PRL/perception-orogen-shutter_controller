@@ -17,6 +17,7 @@ namespace shutter_controller {
         //int shutter_time; // initialized by configure hook with shutter time from yml value for left camera
         ShutterController* shutterCtrl;
         RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> frame;
+        bool stop;
 
     public:
         Task(std::string const& name = "shutter_controller::Task");
