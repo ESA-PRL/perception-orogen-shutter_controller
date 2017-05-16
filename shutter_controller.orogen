@@ -21,7 +21,7 @@ task_context "Task" do
     input_port("frame", ro_ptr('base::samples::frame::Frame')).
         doc("Input of the left camera")
 
-    input_port("stop", "bool").
+    input_port("estop", "bool").
         doc("stops the shutter controller during panorama acquisitions")
 
     output_port("shutter_value", "int").

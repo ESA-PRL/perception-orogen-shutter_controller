@@ -41,9 +41,9 @@ void Task::updateHook()
     if ((periodCounter++)%shutterCompPeriod != 0)
         return;
 
-    if (_stop.connected())
+    if (_estop.connected())
     {
-        if (_stop.read(stop) == RTT::NewData)
+        if (_estop.read(stop) == RTT::NewData)
             std::cout << " Stop shutter : " << stop << std::endl;
     }
 
