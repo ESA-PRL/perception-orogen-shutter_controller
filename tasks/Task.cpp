@@ -23,8 +23,8 @@ bool Task::configureHook()
 
     const shutter_controller::Config config = _config.get();
     shutter_controller = new shutter_controller::ShutterController(config);
-    shutter_computation_period = config.shutterCompPeriod;
-    stop=false;
+    shutter_computation_period = config.shutter_computation_period;
+    stop = false;
 
     return true;
 }
