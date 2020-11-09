@@ -8,6 +8,7 @@
   <logo>http://</logo>
   <depend package="base/cmake" />
   <depend package="perception/shutter_controller" />
+  <depend package="perception/frame_helper" />
   <depend package="drivers/orogen/camera_base" />
   <depend package="drivers/orogen/camera_firewire" />
 </package>
